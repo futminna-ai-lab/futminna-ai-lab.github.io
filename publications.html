@@ -1,0 +1,574 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Publications - HausaNLP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/hausanlp.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+	</head>
+	<body class="is-preload">
+
+		<!-- Mobile Menu Toggle -->
+		<div id="navToggle">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+
+		<!-- Sidebar -->
+		<section id="sidebar">
+			<div class="inner">
+				<nav>
+					<ul>
+						<li><a href="index.html">Home</a></li>
+                        <li><a href="team.html">Team</a></li>
+						<li><a href="research.html">Research</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+						<li><a href="publications.html" class="active">Publications</a></li>
+						<li><a href="about.html">About</a></li>
+						<li><a href="contact.html">Contact</a></li>
+					</ul>
+				</nav>
+			</div>
+		</section>
+
+		<!-- Wrapper -->
+		<div id="wrapper">
+
+			<!-- Header -->
+			<section id="intro" class="wrapper style1-alt fade-up">
+				<div class="inner">
+					<h1>Publications</h1>
+					<p>Our research contributions to Hausa natural language processing and African language technologies.</p>
+				</div>
+			</section>
+
+			<!-- Publication Controls and Stats -->
+			<section class="wrapper style1 fade-up">
+				<div class="inner">
+					<!-- Statistics Bar -->
+					<div class="stats-bar" id="statsBar" style="display: none;">
+						<div class="stats-item">
+							<span class="number" id="totalPapers">0</span>
+							<span class="label">Papers</span>
+						</div>
+						<div class="stats-item">
+							<span class="number" id="totalYears">0</span>
+							<span class="label">Years</span>
+						</div>
+						<div class="stats-item">
+							<span class="number" id="topVenues">0</span>
+							<span class="label">Venues</span>
+						</div>
+					</div>
+
+					<!-- Filter Controls -->
+					<div class="filter-controls">
+						<div class="filter-row">
+							<div class="filter-group search-box">
+								<label for="searchInput">Search:</label>
+								<input type="text" id="searchInput" placeholder="Search titles, authors, venues..." />
+							</div>
+							<div class="filter-group">
+								<label for="yearFilter">Year:</label>
+								<select id="yearFilter">
+									<option value="">All Years</option>
+								</select>
+							</div>
+							<div class="filter-group">
+								<label for="typeFilter">Type:</label>
+								<select id="typeFilter">
+									<option value="">All Types</option>
+									<option value="article">Journal Articles</option>
+									<option value="inproceedings">Conference Papers</option>
+									<option value="incollection">Book Chapters</option>
+									<option value="phdthesis">PhD Theses</option>
+									<option value="mastersthesis">Master's Theses</option>
+									<option value="techreport">Technical Reports</option>
+								</select>
+							</div>
+							<div class="filter-group">
+								<label for="authorFilter">Author:</label>
+								<select id="authorFilter">
+									<option value="">All Authors</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loading Spinner -->
+					<div class="loading-spinner" id="loadingSpinner">
+						<div class="spinner"></div>
+						<p>Loading publications...</p>
+					</div>
+
+					<!-- Publications Container -->
+					<div id="publicationsContainer"></div>
+
+					<!-- No Results Message -->
+					<div class="no-results" id="noResults" style="display: none;">
+						<h3>No publications found</h3>
+						<p>Try adjusting your search criteria or filters.</p>
+					</div>
+				</div>
+			</section>
+
+		</div>
+
+		<!-- BibTeX Modal -->
+		<div id="bibtexModal" class="bibtex-modal">
+			<div class="bibtex-content">
+				<span class="bibtex-close">&times;</span>
+				<h2>BibTeX Citation</h2>
+				<div class="bibtex-code" id="bibtexCode"></div>
+				<div style="text-align: center; margin-top: 1em;">
+					<button class="button small" onclick="copyBibtex()">Copy to Clipboard</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<footer id="footer" class="wrapper style1-alt">
+			<div class="inner">
+				<ul class="menu">
+					<li>&copy; 2025 HausaNLP. All rights reserved.</li><li>Advancing NLP for African Languages</li>
+				</ul>
+			</div>
+		</footer>
+
+		<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		<script src="assets/js/hausanlp.js"></script>
+
+		<script>
+		// Publications data storage
+		let publicationsData = [];
+		let filteredData = [];
+
+		// Load and parse BibTeX file
+		async function loadPublications() {
+			try {
+				// Replace 'publications.bib' with your actual BibTeX file path
+				const response = await fetch('assets/data/publications.bib');
+				
+				if (!response.ok) {
+					throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+				}
+				
+				const bibtexText = await response.text();
+				console.log('BibTeX file loaded, length:', bibtexText.length);
+				console.log('First 500 characters:', bibtexText.substring(0, 500));
+				
+				publicationsData = parseBibtex(bibtexText);
+				console.log('Parsed publications:', publicationsData.length);
+				
+				if (publicationsData.length === 0) {
+					throw new Error('No publications found in BibTeX file');
+				}
+				
+				filteredData = [...publicationsData];
+				
+				populateFilters();
+				updateStats();
+				displayPublications();
+				
+				document.getElementById('loadingSpinner').style.display = 'none';
+				document.getElementById('statsBar').style.display = 'block';
+			} catch (error) {
+				console.error('Error loading publications:', error);
+				document.getElementById('loadingSpinner').innerHTML = `
+					<p style="color: #ff6b6b;">Error loading publications: ${error.message}</p>
+					<p style="color: #9bf1ff; font-size: 0.9em;">Loading demo data instead...</p>
+				`;
+				
+				// Show demo data instead
+				setTimeout(loadDemoData, 2000);
+			}
+		}
+
+		// Demo data for preview
+		function loadDemoData() {
+			publicationsData = [
+				{
+					id: 'ibrahim2025hausabert',
+					type: 'inproceedings',
+					title: 'HausaBERT: A Pre-trained Language Model for Hausa Natural Language Processing',
+					authors: ['Ibrahim, A.', 'Mohammed, S.', 'Garba, M.'],
+					venue: 'Proceedings of ACL 2025',
+					year: '2025',
+					abstract: 'We introduce HausaBERT, the first large-scale pre-trained language model specifically designed for Hausa NLP tasks. Our model achieves state-of-the-art performance on downstream tasks including named entity recognition, part-of-speech tagging, and sentiment analysis.',
+					url: 'https://example.com/hausabert',
+					bibtex: '@inproceedings{ibrahim2025hausabert,\n  title={HausaBERT: A Pre-trained Language Model for Hausa Natural Language Processing},\n  author={Ibrahim, A. and Mohammed, S. and Garba, M.},\n  booktitle={Proceedings of ACL 2025},\n  year={2025}\n}'
+				},
+				{
+					id: 'garba2025transfer',
+					type: 'inproceedings',
+					title: 'Cross-lingual Transfer Learning for Low-resource African Languages: A Case Study of Hausa',
+					authors: ['Garba, M.', 'Aliyu, F.'],
+					venue: 'EMNLP 2025',
+					year: '2025',
+					abstract: 'This paper investigates cross-lingual transfer learning techniques for improving NLP performance on low-resource African languages, with Hausa as our primary case study.',
+					bibtex: '@inproceedings{garba2025transfer,\n  title={Cross-lingual Transfer Learning for Low-resource African Languages: A Case Study of Hausa},\n  author={Garba, M. and Aliyu, F.},\n  booktitle={EMNLP 2025},\n  year={2025}\n}'
+				},
+				{
+					id: 'sani2024dialect',
+					type: 'inproceedings',
+					title: 'Dialect Variation in Hausa Speech Recognition: Challenges and Solutions',
+					authors: ['Sani, H.', 'Umar, K.'],
+					venue: 'INTERSPEECH 2024',
+					year: '2024',
+					abstract: 'We address the challenge of dialect variation in Hausa automatic speech recognition by developing robust models that can handle multiple dialects effectively.',
+					bibtex: '@inproceedings{sani2024dialect,\n  title={Dialect Variation in Hausa Speech Recognition: Challenges and Solutions},\n  author={Sani, H. and Umar, K.},\n  booktitle={INTERSPEECH 2024},\n  year={2024}\n}'
+				}
+			];
+			
+			filteredData = [...publicationsData];
+			populateFilters();
+			updateStats();
+			displayPublications();
+			
+			document.getElementById('loadingSpinner').style.display = 'none';
+			document.getElementById('statsBar').style.display = 'block';
+		}
+
+		// Improved BibTeX parser
+		function parseBibtex(bibtexText) {
+			const entries = [];
+			
+			// Clean up the text
+			bibtexText = bibtexText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+			
+			// More flexible regex to handle different BibTeX formats
+			const entryRegex = /@(\w+)\s*\{\s*([^,\s]+)\s*,?\s*([\s\S]*?)\n\s*\}/g;
+			
+			let match;
+			let entryCount = 0;
+			
+			while ((match = entryRegex.exec(bibtexText)) !== null) {
+				entryCount++;
+				const [fullMatch, type, id, content] = match;
+				
+				console.log(`Processing entry ${entryCount}:`, { type, id });
+				
+				const entry = {
+					id: id.trim(),
+					type: type.toLowerCase(),
+					bibtex: fullMatch
+				};
+				
+				// Parse fields - handle multiple formats
+				const fieldPatterns = [
+					/(\w+)\s*=\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, // Nested braces
+					/(\w+)\s*=\s*"([^"]*(?:\\.[^"]*)*)"/g,            // Double quotes
+					/(\w+)\s*=\s*([^,\n]+?)(?=,|\n|\s*\})/g         // Simple values
+				];
+				
+				for (const pattern of fieldPatterns) {
+					let fieldMatch;
+					while ((fieldMatch = pattern.exec(content)) !== null) {
+						const [, key, value] = fieldMatch;
+						if (!entry[key.toLowerCase()]) {
+							entry[key.toLowerCase()] = value.trim();
+						}
+					}
+				}
+				
+				// Process authors - handle different formats
+				if (entry.author) {
+					// Handle "and" separated authors
+					if (entry.author.includes(' and ')) {
+						entry.authors = entry.author.split(' and ').map(author => author.trim());
+					} else {
+						// Handle comma-separated authors as fallback
+						entry.authors = entry.author.split(',').map(author => author.trim());
+					}
+				}
+				
+				// Set venue based on type and available fields
+				if (entry.booktitle) {
+					entry.venue = entry.booktitle;
+				} else if (entry.journal) {
+					entry.venue = entry.journal;
+				} else if (entry.school) {
+					entry.venue = entry.school;
+				} else if (entry.institution) {
+					entry.venue = entry.institution;
+				} else if (entry.publisher) {
+					entry.venue = entry.publisher;
+				}
+				
+				// Ensure we have at least a title
+				if (entry.title || entry.id) {
+					entries.push(entry);
+					console.log(`Successfully parsed entry:`, entry);
+				} else {
+					console.warn(`Skipping entry with no title:`, entry);
+				}
+			}
+			
+			console.log(`Total entries parsed: ${entries.length} out of ${entryCount} found`);
+			
+			// Sort by year (descending) then by title
+			return entries.sort((a, b) => {
+				const yearA = parseInt(a.year) || 0;
+				const yearB = parseInt(b.year) || 0;
+				const yearDiff = yearB - yearA;
+				return yearDiff !== 0 ? yearDiff : (a.title || '').localeCompare(b.title || '');
+			});
+		}
+
+		// Populate filter dropdowns
+		function populateFilters() {
+			const years = [...new Set(publicationsData.map(p => p.year).filter(Boolean))].sort((a, b) => b - a);
+			
+			// Process authors to handle name variations
+			const allAuthors = publicationsData.flatMap(p => p.authors || []);
+			const uniqueAuthors = new Map();
+			
+			allAuthors.forEach(author => {
+				// Normalize author name for comparison
+				const normalized = normalizeAuthorName(author);
+				if (!uniqueAuthors.has(normalized)) {
+					uniqueAuthors.set(normalized, author);
+				}
+			});
+			
+			const authors = Array.from(uniqueAuthors.values()).sort();
+			
+			const yearSelect = document.getElementById('yearFilter');
+			years.forEach(year => {
+				const option = document.createElement('option');
+				option.value = year;
+				option.textContent = year;
+				yearSelect.appendChild(option);
+			});
+			
+			const authorSelect = document.getElementById('authorFilter');
+			authors.forEach(author => {
+				const option = document.createElement('option');
+				option.value = author;
+				option.textContent = author;
+				authorSelect.appendChild(option);
+			});
+		}
+
+		// Normalize author names for comparison (handles "Last, First" vs "First Last")
+		function normalizeAuthorName(name) {
+			// Remove extra spaces and convert to lowercase
+			const cleaned = name.trim().toLowerCase();
+			
+			// Split by comma if present
+			if (cleaned.includes(',')) {
+				const parts = cleaned.split(',').map(part => part.trim());
+				// Return "first last" format
+				return parts.reverse().join(' ');
+			}
+			
+			return cleaned;
+		}
+
+		// Update statistics
+		function updateStats() {
+			const years = [...new Set(filteredData.map(p => p.year).filter(Boolean))];
+			const venues = [...new Set(filteredData.map(p => p.venue).filter(Boolean))];
+			
+			document.getElementById('totalPapers').textContent = filteredData.length;
+			document.getElementById('totalYears').textContent = years.length;
+			document.getElementById('topVenues').textContent = venues.length;
+		}
+
+		// Display publications
+		function displayPublications() {
+			const container = document.getElementById('publicationsContainer');
+			const noResults = document.getElementById('noResults');
+			
+			if (filteredData.length === 0) {
+				container.innerHTML = '';
+				noResults.style.display = 'block';
+				return;
+			}
+			
+			noResults.style.display = 'none';
+			
+			// Group by year
+			const groupedByYear = filteredData.reduce((groups, pub) => {
+				const year = pub.year || 'Unknown';
+				if (!groups[year]) groups[year] = [];
+				groups[year].push(pub);
+				return groups;
+			}, {});
+			
+			const sortedYears = Object.keys(groupedByYear).sort((a, b) => {
+				if (a === 'Unknown') return 1;
+				if (b === 'Unknown') return -1;
+				return parseInt(b) - parseInt(a);
+			});
+			
+			let html = '';
+			sortedYears.forEach(year => {
+				const yearPublications = groupedByYear[year];
+				const expandedState = localStorage.getItem(`year-${year}-expanded`);
+				const isExpanded = expandedState === null || expandedState === 'true';
+				
+				html += `<div class="year-section">
+					<h2 class="year-header" onclick="toggleYear('${year}')">
+						<span>
+							${year}
+							<span class="year-count">(${yearPublications.length} ${yearPublications.length === 1 ? 'paper' : 'papers'})</span>
+						</span>
+						<span class="year-toggle" id="toggle-${year}">▼</span>
+					</h2>
+					<div class="year-content" id="content-${year}" ${!isExpanded ? 'class="collapsed"' : ''}>`;
+				
+				yearPublications.forEach(pub => {
+					html += createPublicationCard(pub);
+				});
+				
+				html += '</div></div>';
+			});
+			
+			container.innerHTML = html;
+		}
+
+		// Create publication card HTML
+		function createPublicationCard(pub) {
+			const allAuthors = pub.authors || [];
+			const displayAuthors = allAuthors.length > 7 
+				? allAuthors.slice(0, 7).join(', ') + ', et al.'
+				: allAuthors.join(', ');
+			const searchAuthors = allAuthors.join(', ');
+			const abstractId = `abstract-${pub.id}`;
+			
+			return `
+				<div class="publication-item" data-year="${pub.year}" data-type="${pub.type}" data-authors="${searchAuthors.toLowerCase()}">
+					<div class="publication-title">${pub.title || 'Untitled'}</div>
+					<div class="publication-authors">${displayAuthors}</div>
+					${pub.venue ? `<div class="publication-venue">${pub.venue}</div>` : ''}
+					${pub.year ? `<div class="publication-year">${pub.year}</div>` : ''}
+					${pub.abstract ? `
+						<div class="publication-abstract" id="${abstractId}">
+							${pub.abstract}
+						</div>
+					` : ''}
+					<div class="publication-links">
+						${pub.abstract ? `<button class="button small" onclick="toggleAbstract('${abstractId}')">Abstract</button>` : ''}
+						<button class="button small" onclick="showBibtex('${pub.id}')">BibTeX</button>
+						${pub.url ? `<a href="${pub.url}" class="button small" target="_blank">Paper</a>` : ''}
+						${pub.doi ? `<a href="https://doi.org/${pub.doi}" class="button small" target="_blank">DOI</a>` : ''}
+					</div>
+				</div>
+			`;
+		}
+
+		// Toggle abstract visibility
+		function toggleAbstract(abstractId) {
+			const element = document.getElementById(abstractId);
+			element.classList.toggle('show');
+		}
+
+		// Show BibTeX modal
+		function showBibtex(publicationId) {
+			const pub = publicationsData.find(p => p.id === publicationId);
+			if (pub && pub.bibtex) {
+				document.getElementById('bibtexCode').textContent = pub.bibtex;
+				document.getElementById('bibtexModal').style.display = 'block';
+			}
+		}
+
+		// Copy BibTeX to clipboard
+		function copyBibtex() {
+			const bibtexText = document.getElementById('bibtexCode').textContent;
+			navigator.clipboard.writeText(bibtexText).then(() => {
+				alert('BibTeX copied to clipboard!');
+			});
+		}
+
+		// Toggle year section visibility
+		function toggleYear(year) {
+			const content = document.getElementById(`content-${year}`);
+			const toggle = document.getElementById(`toggle-${year}`);
+			const isCollapsed = content.classList.contains('collapsed') || 
+							   content.style.maxHeight === '0px' || 
+							   content.style.opacity === '0';
+			
+			if (isCollapsed) {
+				// Expand
+				content.classList.remove('collapsed');
+				content.style.maxHeight = 'none';
+				content.style.opacity = '1';
+				content.style.marginBottom = '';
+				toggle.textContent = '▼';
+				localStorage.setItem(`year-${year}-expanded`, 'true');
+			} else {
+				// Collapse
+				content.classList.add('collapsed');
+				content.style.maxHeight = '0';
+				content.style.opacity = '0';
+				content.style.marginBottom = '0';
+				toggle.textContent = '▶';
+				localStorage.setItem(`year-${year}-expanded`, 'false');
+			}
+		}
+
+		// Filter publications
+		function filterPublications() {
+			const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+			const yearFilter = document.getElementById('yearFilter').value;
+			const typeFilter = document.getElementById('typeFilter').value;
+			const authorFilter = document.getElementById('authorFilter').value;
+			
+			filteredData = publicationsData.filter(pub => {
+				const matchesSearch = !searchTerm || 
+					(pub.title || '').toLowerCase().includes(searchTerm) ||
+					(pub.authors || []).some(author => author.toLowerCase().includes(searchTerm)) ||
+					(pub.venue || '').toLowerCase().includes(searchTerm);
+				
+				const matchesYear = !yearFilter || pub.year === yearFilter;
+				const matchesType = !typeFilter || pub.type === typeFilter;
+				
+				// Normalize both the selected author and publication authors for comparison
+				const matchesAuthor = !authorFilter || (pub.authors || []).some(author => 
+					normalizeAuthorName(author) === normalizeAuthorName(authorFilter)
+				);
+				
+				return matchesSearch && matchesYear && matchesType && matchesAuthor;
+			});
+			
+			updateStats();
+			displayPublications();
+		}
+
+		// Event listeners
+		document.getElementById('searchInput').addEventListener('input', filterPublications);
+		document.getElementById('yearFilter').addEventListener('change', filterPublications);
+		document.getElementById('typeFilter').addEventListener('change', filterPublications);
+		document.getElementById('authorFilter').addEventListener('change', filterPublications);
+
+		// Modal event listeners
+		document.querySelector('.bibtex-close').addEventListener('click', () => {
+			document.getElementById('bibtexModal').style.display = 'none';
+		});
+
+		window.addEventListener('click', (event) => {
+			const modal = document.getElementById('bibtexModal');
+			if (event.target === modal) {
+				modal.style.display = 'none';
+			}
+		});
+
+		// Initialize
+		document.addEventListener('DOMContentLoaded', () => {
+			loadPublications();
+		});
+		</script>
+	</body>
+</html>

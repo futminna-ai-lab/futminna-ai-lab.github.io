@@ -1,1 +1,0 @@
-Lecturer in Computer Science at Ahmadu Bello University, Zaria (ABU)

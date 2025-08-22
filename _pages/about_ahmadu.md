@@ -1,1 +1,0 @@
-Assistant Professor of English and Literature at the American University of Nigeria, Yola

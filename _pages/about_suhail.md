@@ -1,1 +1,0 @@
-Founder, Hausa Hackathon Africa
