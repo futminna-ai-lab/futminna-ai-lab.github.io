@@ -13,6 +13,517 @@
 		<link rel="stylesheet" href="assets/css/hausanlp.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+		<style>
+			/* Remove footer from fullscreen calculation */
+			#intro.fullscreen {
+				height: 100vh;
+				overflow: hidden;
+			}
+
+			#intro .inner {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				max-height: 100vh;
+				padding: 2em;
+				box-sizing: border-box;
+			}
+
+			.hausanlp-title {
+				margin-bottom: 0.5em;
+				font-family: Arial, Helvetica, sans-serif;
+				font-weight: bold;
+				color: #ffffff;
+			}
+
+			.hausanlp-subtitle {
+				margin-bottom: 1.5em;
+				font-family: Arial, Helvetica, sans-serif;
+				color: rgba(255, 255, 255, 0.55);
+			}
+
+			/* Compact Carousel integrated into intro */
+			.intro-carousel {
+				margin-top: 1.5em;
+				position: relative;
+				flex-shrink: 0;
+				font-family: Arial, Helvetica, sans-serif;
+				width: 100%;
+				max-width: 100%;
+				padding: 0 1em;
+				box-sizing: border-box;
+			}
+
+			.carousel-wrapper {
+				position: relative;
+				overflow: hidden;
+				border-radius: 1.5em;
+				border: solid 1px rgba(255, 255, 255, 0.15);
+				background: rgba(255, 255, 255, 0.08);
+				backdrop-filter: blur(10px);
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
+				           0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+				max-width: 600px;
+				width: 100%;
+				margin: 0 auto;
+			}
+
+			.carousel-track {
+				display: flex;
+				transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+			}
+
+			.carousel-slide {
+				min-width: 100%;
+				background: transparent;
+				padding: 1.8em 2em 0.8em 4.5em;
+				display: flex;
+				align-items: center;
+				gap: 1em;
+				position: relative;
+				overflow: hidden;
+				min-height: 90px;
+				border-top: solid 1px rgba(255, 255, 255, 0.1);
+			}
+
+			.carousel-slide::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(135deg, 
+					rgba(255, 255, 255, 0.03) 0%, 
+					transparent 50%, 
+					rgba(94, 66, 166, 0.05) 100%);
+				pointer-events: none;
+			}
+
+			.carousel-slide:first-child {
+				border-top: 0;
+			}
+
+			.carousel-slide:nth-child(2n) {
+				border-left: solid 1px rgba(255, 255, 255, 0.15);
+				border-left: none; /* Override for carousel */
+			}
+
+			.slide-content {
+				flex: 3.5;
+			}
+
+			.slide-image {
+				flex: 0.8;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.slide-visual {
+				width: 1.4em;
+				height: 1.4em;
+				background: linear-gradient(135deg, 
+					#ffffff 0%, 
+					rgba(255, 255, 255, 0.95) 100%);
+				border-radius: 50%;
+				color: #312450;
+				text-align: center;
+				line-height: 1.4em;
+				margin: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 0.7em;
+				box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2), 
+				           0 0 0 2px rgba(255, 255, 255, 0.1);
+				position: relative;
+				overflow: hidden;
+				-moz-transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+				-webkit-transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+				-ms-transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+				transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+			}
+
+			.slide-visual::before {
+				content: '';
+				position: absolute;
+				top: -50%;
+				left: -50%;
+				width: 200%;
+				height: 200%;
+				background: conic-gradient(
+					transparent, 
+					rgba(94, 66, 166, 0.1) 20%, 
+					transparent 40%,
+					rgba(155, 241, 255, 0.15) 60%,
+					transparent 80%
+				);
+				animation: rotate 12s linear infinite;
+				z-index: 1;
+			}
+
+			.slide-visual::after {
+				content: '';
+				position: absolute;
+				top: 2px;
+				left: 2px;
+				right: 2px;
+				bottom: 2px;
+				background: linear-gradient(135deg, 
+					#ffffff 0%, 
+					rgba(255, 255, 255, 0.98) 100%);
+				border-radius: 50%;
+				z-index: 2;
+			}
+
+			.slide-visual > * {
+				position: relative;
+				z-index: 3;
+			}
+
+			@keyframes rotate {
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
+			}
+
+			.slide-category {
+				display: inline-block;
+				background: rgba(255, 255, 255, 0.1);
+				color: rgba(255, 255, 255, 0.55);
+				padding: 0.2em 0.6em;
+				border-radius: 0.25em;
+				font-size: 0.5em;
+				font-weight: bold;
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin-bottom: 0.5em;
+				border: solid 1px rgba(255, 255, 255, 0.15);
+			}
+
+			.slide-title {
+				color: #ffffff;
+				font-size: 1.1em;
+				font-weight: bold;
+				margin-bottom: 0.5em;
+				line-height: 1.3;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.slide-description {
+				color: rgba(255, 255, 255, 0.55);
+				font-size: 0.7em;
+				font-weight: normal;
+				line-height: 1.4;
+				margin-bottom: 0.8em;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.slide-actions {
+				display: flex;
+				gap: 0.6em;
+			}
+
+			.slide-actions .button {
+				-moz-appearance: none;
+				-webkit-appearance: none;
+				-ms-appearance: none;
+				appearance: none;
+				-moz-transition: border-color 0.2s ease;
+				-webkit-transition: border-color 0.2s ease;
+				-ms-transition: border-color 0.2s ease;
+				transition: border-color 0.2s ease;
+				background-color: transparent;
+				border: solid 1px !important;
+				border-color: rgba(255, 255, 255, 0.15) !important;
+				border-radius: 3em;
+				color: #ffffff !important;
+				cursor: pointer;
+				display: inline-block;
+				font-size: 0.35em;
+				font-weight: bold;
+				height: calc(4.75em + 2px);
+				letter-spacing: 0.2em;
+				line-height: 4.75em;
+				outline: 0;
+				padding: 0 3.5em;
+				position: relative;
+				text-align: center;
+				text-decoration: none;
+				text-transform: uppercase;
+				white-space: nowrap;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.slide-actions .button:hover {
+				border-color: rgba(255, 255, 255, 0.55) !important;
+			}
+
+			.slide-actions .button:after {
+				-moz-transform: scale(0.25);
+				-webkit-transform: scale(0.25);
+				-ms-transform: scale(0.25);
+				transform: scale(0.25);
+				pointer-events: none;
+				-moz-transition: opacity 0.2s ease, -moz-transform 0.2s ease;
+				-webkit-transition: opacity 0.2s ease, -webkit-transform 0.2s ease;
+				-ms-transition: opacity 0.2s ease, -ms-transform 0.2s ease;
+				transition: opacity 0.2s ease, transform 0.2s ease;
+				background: #ffffff;
+				border-radius: 3em;
+				content: '';
+				height: 100%;
+				left: 0;
+				opacity: 0;
+				position: absolute;
+				top: 0;
+				width: 100%;
+			}
+
+			.slide-actions .button:hover:after {
+				opacity: 0.05;
+				-moz-transform: scale(1);
+				-webkit-transform: scale(1);
+				-ms-transform: scale(1);
+				transform: scale(1);
+			}
+
+			.carousel-controls {
+				position: absolute;
+				bottom: -1.5em;
+				left: 50%;
+				transform: translateX(-50%);
+				display: flex;
+				gap: 0.6em;
+				align-items: center;
+			}
+
+			.carousel-nav {
+				background: linear-gradient(135deg, 
+					rgba(255, 255, 255, 0.1) 0%, 
+					rgba(94, 66, 166, 0.2) 100%);
+				border: solid 1px rgba(255, 255, 255, 0.2);
+				color: #ffffff;
+				width: 48px;
+				height: 48px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+				font-size: 1.1em;
+				font-family: Arial, Helvetica, sans-serif;
+				outline: 0;
+				position: relative;
+				overflow: hidden;
+				box-shadow: 0 4px 15px rgba(94, 66, 166, 0.3);
+			}
+
+			.carousel-nav::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(135deg, 
+					rgba(155, 241, 255, 0.2) 0%, 
+					rgba(183, 78, 145, 0.2) 100%);
+				opacity: 0;
+				transition: opacity 0.4s ease;
+			}
+
+			.carousel-nav:hover {
+				background: linear-gradient(135deg, 
+					rgba(155, 241, 255, 0.2) 0%, 
+					rgba(94, 66, 166, 0.3) 100%);
+				border-color: rgba(155, 241, 255, 0.5);
+				transform: translateY(-2px) scale(1.05);
+				box-shadow: 0 8px 25px rgba(94, 66, 166, 0.4), 
+				           0 0 20px rgba(155, 241, 255, 0.3);
+			}
+
+			.carousel-nav:hover::before {
+				opacity: 1;
+			}
+
+			.carousel-nav:active {
+				transform: translateY(-1px) scale(1.02);
+			}
+
+			.carousel-nav:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+				transform: none;
+			}
+
+			.carousel-dots {
+				display: flex;
+				gap: 0.4em;
+			}
+
+			.carousel-dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.2);
+				cursor: pointer;
+				transition: all 0.3s ease;
+				border: solid 1px rgba(255, 255, 255, 0.15);
+			}
+
+			.carousel-dot.active {
+				background: #ffffff;
+				border-color: #ffffff;
+				transform: scale(1.2);
+			}
+
+			.carousel-dot:hover {
+				background: rgba(255, 255, 255, 0.4);
+				border-color: rgba(255, 255, 255, 0.4);
+			}
+
+			.carousel-progress {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 3px;
+				background: linear-gradient(90deg, 
+					#9bf1ff 0%, 
+					#5e42a6 50%, 
+					#b74e91 100%);
+				transition: width 0.1s linear;
+				z-index: 10;
+				border-radius: 0 0 1.5em 0;
+				box-shadow: 0 0 10px rgba(155, 241, 255, 0.5);
+			}
+
+			/* Responsive Design */
+			@media screen and (max-width: 980px) {
+				.intro-carousel {
+					padding: 0 1.5em;
+				}
+
+				.carousel-wrapper {
+					max-width: 100%;
+				}
+
+				.carousel-slide {
+					flex-direction: column;
+					gap: 0.8em;
+					padding: 1.5em 1.2em 0.4em 1.2em;
+					text-align: center;
+					min-height: auto;
+				}
+
+				.slide-image {
+					order: -1;
+				}
+
+				.slide-visual {
+					width: 1.4em;
+					height: 1.4em;
+					font-size: 0.7em;
+					position: relative;
+					left: 0;
+					top: 0;
+				}
+
+				.slide-title {
+					font-size: 1.1em;
+				}
+
+				.slide-description {
+					font-size: 0.7em;
+				}
+
+				.slide-actions {
+					justify-content: center;
+				}
+			}
+
+			@media screen and (max-width: 736px) {
+				.intro-carousel {
+					margin-top: 1.5em;
+					padding: 0 1em;
+				}
+
+				.carousel-wrapper {
+					border-radius: 1em;
+				}
+
+				.carousel-slide {
+					padding: 1.2em 1em 0.4em 1em;
+				}
+
+				.slide-visual {
+					width: 1.4em;
+					height: 1.4em;
+					font-size: 0.7em;
+				}
+
+				.slide-title {
+					font-size: 0.9em;
+				}
+
+				.slide-description {
+					font-size: 0.5em;
+					line-height: 1.3;
+				}
+
+				.slide-actions {
+					flex-direction: column;
+					align-items: center;
+					gap: 0.4em;
+				}
+			}
+
+			@media screen and (max-width: 480px) {
+				.intro-carousel {
+					padding: 0 0.5em;
+				}
+
+				.carousel-wrapper {
+					border-radius: 0.8em;
+				}
+
+				.carousel-slide {
+					padding: 1em 0.8em 0.4em 0.8em;
+				}
+
+				.slide-visual {
+					width: 1em;
+					height: 1em;
+					font-size: 0.5em;
+					left: 0;
+					position: relative;
+					top: 0;
+				}
+
+				.slide-title {
+					font-size: 0.9em;
+				}
+
+				.slide-description {
+					font-size: 0.6em;
+					line-height: 1.2;
+				}
+
+				.slide-category {
+					font-size: 0.4em;
+					padding: 0.15em 0.5em;
+				}
+
+				.slide-actions .button {
+					font-size: 0.3em;
+					padding: 0 3em;
+					letter-spacing: 0.15em;
+				}
+			}
+		</style>
 	</head>
 	<body class="is-preload">
 
@@ -47,64 +558,98 @@
 			<section id="intro" class="wrapper style1-alt fullscreen fade-up">
 				<div class="inner">
 					<h1 class="hausanlp-title">HausaNLP</h1>
-					<p class="hausanlp-subtitle">Advancing Natural Language Processing<br />
-					Building AI tools and resources for Africa languages.</p>
-					<ul class="actions">
-						<li><a href="about.html" class="button">Explore Our Work</a></li>
-					</ul>
+					<p class="hausanlp-subtitle">Advancing NLP for African languages</p>
+					<div style="margin-bottom: 1.5em;">
+						<a href="about.html" class="button small" style="margin: 0; white-space: nowrap; font-size: 0.6em; padding: 0.4em 0.8em; height: auto; line-height: 1.2;">Explore Our Work</a>
+					</div>
+					
+					<!-- Integrated Carousel -->
+					<div class="intro-carousel">
+						<div class="carousel-wrapper">
+							<div class="carousel-progress" id="carouselProgress"></div>
+							<div class="carousel-track" id="carouselTrack">
+								<!-- Slide 1 -->
+								<div class="carousel-slide">
+									<div class="slide-image">
+										<div class="slide-visual icon major">🤖</div>
+									</div>
+									<div class="slide-content">
+										<div class="slide-category">Research Paper</div>
+										<h3 class="slide-title">HausaBERT: Pre-trained Language Model</h3>
+										<p class="slide-description">
+											The first large-scale pre-trained language model specifically designed for Hausa NLP tasks with state-of-the-art performance.
+										</p>
+										<div class="slide-actions">
+											<a href="#" class="button small">Read Paper</a>
+											<a href="#" class="button small">Dataset</a>
+										</div>
+									</div>
+								</div>
+
+								<!-- Slide 2 -->
+								<div class="carousel-slide">
+									<div class="slide-image">
+										<div class="slide-visual icon major">🎙️</div>
+									</div>
+									<div class="slide-content">
+										<div class="slide-category">Open Source</div>
+										<h3 class="slide-title">Hausa Speech Recognition Toolkit</h3>
+										<p class="slide-description">
+											Comprehensive ASR toolkit supporting multiple Hausa dialects with breakthrough performance on low-resource speech data.
+										</p>
+										<div class="slide-actions">
+											<a href="#" class="button small">Try Demo</a>
+											<a href="#" class="button small">GitHub</a>
+										</div>
+									</div>
+								</div>
+
+								<!-- Slide 3 -->
+								<div class="carousel-slide">
+									<div class="slide-image">
+										<div class="slide-visual icon major">📊</div>
+									</div>
+									<div class="slide-content">
+										<div class="slide-category">Dataset</div>
+										<h3 class="slide-title">HausaCorpus: Large-scale Collection</h3>
+										<p class="slide-description">
+											The largest publicly available Hausa text corpus with over 10 million sentences from diverse sources and domains.
+										</p>
+										<div class="slide-actions">
+											<a href="#" class="button small">Download</a>
+											<a href="#" class="button small">Documentation</a>
+										</div>
+									</div>
+								</div>
+
+								<!-- Slide 4 -->
+								<div class="carousel-slide">
+									<div class="slide-image">
+										<div class="slide-visual icon major">🌐</div>
+									</div>
+									<div class="slide-content">
+										<div class="slide-category">Application</div>
+										<h3 class="slide-title">Neural Translation Engine</h3>
+										<p class="slide-description">
+											Revolutionary Hausa-English translation system powered by transformer architecture with real-time processing capabilities.
+										</p>
+										<div class="slide-actions">
+											<a href="#" class="button small">Try Translator</a>
+											<a href="#" class="button small">API</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="carousel-controls">
+							<div class="carousel-dots" id="carouselDots"></div>
+						</div>
+					</div>
 				</div>
 			</section>
 
-			<!-- Quick Overview -->
-			<section id="overview" class="wrapper style2 spotlights">
-				<section>
-					<a href="about.html" class="image"><img src="images/pic01.jpg" alt="" data-position="center center" /></a>
-					<div class="content">
-						<div class="inner">
-							<h2>Our Mission</h2>
-							<p>We're dedicated to developing cutting-edge natural language processing tools and resources for the Hausa language, empowering millions of speakers across West Africa with AI technology.</p>
-							<ul class="actions">
-								<li><a href="about.html" class="button">Learn more</a></li>
-							</ul>
-						</div>
-					</div>
-				</section>
-				<section>
-					<a href="research.html" class="image"><img src="images/pic02.jpg" alt="" data-position="top center" /></a>
-					<div class="content">
-						<div class="inner">
-							<h2>Research Excellence</h2>
-							<p>Our team of computational linguists and machine learning researchers are pioneering new approaches to low-resource language processing, with a focus on preserving and promoting Hausa linguistic heritage.</p>
-							<ul class="actions">
-								<li><a href="research.html" class="button">Explore Research</a></li>
-							</ul>
-						</div>
-					</div>
-				</section>
-				<section>
-					<a href="contact.html" class="image"><img src="images/pic03.jpg" alt="" data-position="25% 25%" /></a>
-					<div class="content">
-						<div class="inner">
-							<h2>Community Impact</h2>
-							<p>From educational tools to business applications, our NLP solutions are designed to bridge the digital divide and make technology more accessible to Hausa-speaking communities worldwide.</p>
-							<ul class="actions">
-								<li><a href="contact.html" class="button">Get Involved</a></li>
-							</ul>
-						</div>
-					</div>
-				</section>
-			</section>
-
 		</div>
-
-		<!-- Footer -->
-		<footer id="footer" class="wrapper style1-alt">
-			<div class="inner">
-				<ul class="menu">
-					<li>&copy; 2025 HausaNLP. All rights reserved.</li><li>Advancing NLP for African Languages</li>
-				</ul>
-			</div>
-		</footer>
 
 		<!-- Scripts -->
 		<script src="assets/js/jquery.min.js"></script>
@@ -115,5 +660,372 @@
 		<script src="assets/js/util.js"></script>
 		<script src="assets/js/main.js"></script>
 		<script src="assets/js/hausanlp.js"></script>
+		
+		<script>
+		// Markdown Parser for Carousel Content
+		class MarkdownCarouselParser {
+			static parseMarkdownContent(markdown) {
+				// Split content by slide separators (---)
+				const slideTexts = markdown.split(/\n---+\n/);
+				const slides = [];
+
+				slideTexts.forEach(slideText => {
+					const slide = this.parseSlide(slideText.trim());
+					if (slide) slides.push(slide);
+				});
+
+				return slides;
+			}
+
+			static parseSlide(slideText) {
+				if (!slideText) return null;
+
+				const lines = slideText.split('\n').map(line => line.trim());
+				const slide = {
+					category: '',
+					title: '',
+					description: '',
+					icon: '📄',
+					buttons: []
+				};
+
+				let currentSection = null;
+				let descriptionLines = [];
+
+				lines.forEach(line => {
+					if (line.startsWith('# ')) {
+						// Category (H1)
+						slide.category = line.substring(2);
+					} else if (line.startsWith('## ')) {
+						// Title (H2)
+						slide.title = line.substring(3);
+					} else if (line.startsWith('Icon: ')) {
+						// Icon
+						slide.icon = line.substring(6);
+					} else if (line.startsWith('Buttons: ')) {
+						// Parse buttons: "Button Text (url), Button Text (url)"
+						const buttonText = line.substring(9);
+						slide.buttons = this.parseButtons(buttonText);
+					} else if (line && !line.startsWith('#') && !line.startsWith('Icon:') && !line.startsWith('Buttons:')) {
+						// Description text
+						descriptionLines.push(line);
+					}
+				});
+
+				slide.description = descriptionLines.join(' ');
+				return slide;
+			}
+
+			static parseButtons(buttonText) {
+				const buttons = [];
+				// Match pattern: "Text (url), Text (url)"
+				const buttonMatches = buttonText.match(/([^(]+)\(([^)]+)\)/g);
+				
+				if (buttonMatches) {
+					buttonMatches.forEach(match => {
+						const parts = match.match(/([^(]+)\(([^)]+)\)/);
+						if (parts) {
+							buttons.push({
+								text: parts[1].trim().replace(/,\s*$/, ''),
+								link: parts[2].trim()
+							});
+						}
+					});
+				}
+
+				return buttons;
+			}
+		}
+
+		// Enhanced Carousel functionality with Markdown support
+		class HausaNLPCarousel {
+			constructor() {
+				this.currentSlide = 0;
+				this.slides = [];
+				this.totalSlides = 0;
+				this.track = document.getElementById('carouselTrack');
+				this.dotsContainer = document.getElementById('carouselDots');
+				this.progressBar = document.getElementById('carouselProgress');
+				
+				this.autoPlayInterval = null;
+				this.autoPlayDuration = 6000; // 6 seconds per slide
+				this.progressWidth = 0;
+				
+				this.init();
+			}
+			
+			async init() {
+				await this.loadContent();
+				this.bindEvents();
+				if (this.totalSlides > 0) {
+					this.createDots();
+					this.updateCarousel();
+					this.startAutoPlay();
+				}
+			}
+
+			async loadContent() {
+				try {
+					// Try to load from markdown file
+					const response = await fetch('carousel-content.md');
+					if (!response.ok) {
+						throw new Error('Markdown file not found');
+					}
+					
+					const markdownContent = await response.text();
+					const parsedSlides = MarkdownCarouselParser.parseMarkdownContent(markdownContent);
+					
+					if (parsedSlides.length > 0) {
+						this.renderSlides(parsedSlides);
+						this.slides = document.querySelectorAll('.carousel-slide');
+						this.totalSlides = this.slides.length;
+					} else {
+						this.showError('No slides found in markdown file');
+					}
+				} catch (error) {
+					console.warn('Could not load carousel content from markdown:', error);
+					this.loadFallbackContent();
+				}
+			}
+
+			renderSlides(slidesData) {
+				this.track.innerHTML = '';
+				
+				slidesData.forEach(slideData => {
+					const slideElement = this.createSlideElement(slideData);
+					this.track.appendChild(slideElement);
+				});
+			}
+
+			createSlideElement(slideData) {
+				const slide = document.createElement('div');
+				slide.className = 'carousel-slide';
+
+				const buttonsHTML = slideData.buttons.map(button => 
+					`<a href="${button.link}" class="button small">${button.text}</a>`
+				).join('');
+
+				slide.innerHTML = `
+					<div class="slide-image">
+						<div class="slide-visual icon major">${slideData.icon}</div>
+					</div>
+					<div class="slide-content">
+						<div class="slide-category">${slideData.category}</div>
+						<h3 class="slide-title">${slideData.title}</h3>
+						<p class="slide-description">${slideData.description}</p>
+						<div class="slide-actions">${buttonsHTML}</div>
+					</div>
+				`;
+
+				return slide;
+			}
+
+			loadFallbackContent() {
+				// Fallback to hardcoded content if markdown file is not available
+				const fallbackSlides = [
+					{
+						category: "Research Paper",
+						title: "HausaBERT: Pre-trained Language Model",
+						description: "The first large-scale pre-trained language model specifically designed for Hausa NLP tasks with state-of-the-art performance.",
+						icon: "🤖",
+						buttons: [
+							{text: "Read Paper", link: "#"},
+							{text: "Dataset", link: "#"}
+						]
+					},
+					{
+						category: "Open Source",
+						title: "Hausa Speech Recognition Toolkit",
+						description: "Comprehensive ASR toolkit supporting multiple Hausa dialects with breakthrough performance on low-resource speech data.",
+						icon: "🎙️",
+						buttons: [
+							{text: "Try Demo", link: "#"},
+							{text: "GitHub", link: "#"}
+						]
+					},
+					{
+						category: "Dataset",
+						title: "HausaCorpus: Large-scale Collection",
+						description: "The largest publicly available Hausa text corpus with over 10 million sentences from diverse sources and domains.",
+						icon: "📊",
+						buttons: [
+							{text: "Download", link: "#"},
+							{text: "Documentation", link: "#"}
+						]
+					},
+					{
+						category: "Application",
+						title: "Neural Translation Engine",
+						description: "Revolutionary Hausa-English translation system powered by transformer architecture with real-time processing capabilities.",
+						icon: "🌐",
+						buttons: [
+							{text: "Try Translator", link: "#"},
+							{text: "API", link: "#"}
+						]
+					}
+				];
+
+				this.renderSlides(fallbackSlides);
+				this.slides = document.querySelectorAll('.carousel-slide');
+				this.totalSlides = this.slides.length;
+			}
+
+			showError(message) {
+				this.track.innerHTML = `
+					<div class="carousel-slide">
+						<div class="slide-image">
+							<div class="slide-visual icon major">❌</div>
+						</div>
+						<div class="slide-content">
+							<div class="slide-category">Error</div>
+							<h3 class="slide-title">Content Load Error</h3>
+							<p class="slide-description">${message}</p>
+							<div class="slide-actions">
+								<button class="button small" onclick="location.reload()">Retry</button>
+							</div>
+						</div>
+					</div>
+				`;
+				this.slides = document.querySelectorAll('.carousel-slide');
+				this.totalSlides = this.slides.length;
+			}
+			
+			createDots() {
+				this.dotsContainer.innerHTML = '';
+				for (let i = 0; i < this.totalSlides; i++) {
+					const dot = document.createElement('div');
+					dot.classList.add('carousel-dot');
+					if (i === 0) dot.classList.add('active');
+					dot.addEventListener('click', () => this.goToSlide(i));
+					this.dotsContainer.appendChild(dot);
+				}
+			}
+			
+			bindEvents() {
+				// Pause auto-play on hover
+				const carousel = document.querySelector('.carousel-wrapper');
+				if (carousel) {
+					carousel.addEventListener('mouseenter', () => this.pauseAutoPlay());
+					carousel.addEventListener('mouseleave', () => this.startAutoPlay());
+				}
+				
+				// Keyboard navigation
+				document.addEventListener('keydown', (e) => {
+					if (e.key === 'ArrowLeft') this.prevSlide();
+					if (e.key === 'ArrowRight') this.nextSlide();
+				});
+				
+				// Touch/swipe support
+				let startX = 0;
+				let endX = 0;
+				
+				if (carousel) {
+					carousel.addEventListener('touchstart', (e) => {
+						startX = e.touches[0].clientX;
+					});
+					
+					carousel.addEventListener('touchend', (e) => {
+						endX = e.changedTouches[0].clientX;
+						const diff = startX - endX;
+						
+						if (Math.abs(diff) > 50) { // Minimum swipe distance
+							if (diff > 0) {
+								this.nextSlide();
+							} else {
+								this.prevSlide();
+							}
+						}
+					});
+				}
+			}
+			
+			updateCarousel() {
+				if (this.totalSlides === 0) return;
+
+				// Move track
+				const translateX = -this.currentSlide * 100;
+				this.track.style.transform = `translateX(${translateX}%)`;
+				
+				// Update dots
+				const dots = document.querySelectorAll('.carousel-dot');
+				dots.forEach((dot, index) => {
+					dot.classList.toggle('active', index === this.currentSlide);
+				});
+				
+				// Reset progress
+				this.progressWidth = 0;
+				this.updateProgress();
+			}
+			
+			updateProgress() {
+				this.progressBar.style.width = `${this.progressWidth}%`;
+			}
+			
+			goToSlide(index) {
+				this.currentSlide = index;
+				this.updateCarousel();
+				this.restartAutoPlay();
+			}
+			
+			nextSlide() {
+				if (this.totalSlides === 0) return;
+				
+				if (this.currentSlide < this.totalSlides - 1) {
+					this.currentSlide++;
+				} else {
+					this.currentSlide = 0; // Loop back to first slide
+				}
+				this.updateCarousel();
+				this.restartAutoPlay();
+			}
+			
+			prevSlide() {
+				if (this.totalSlides === 0) return;
+				
+				if (this.currentSlide > 0) {
+					this.currentSlide--;
+				} else {
+					this.currentSlide = this.totalSlides - 1; // Loop to last slide
+				}
+				this.updateCarousel();
+				this.restartAutoPlay();
+			}
+			
+			startAutoPlay() {
+				if (this.totalSlides <= 1) return;
+				
+				this.pauseAutoPlay(); // Clear any existing interval
+				
+				const progressInterval = setInterval(() => {
+					this.progressWidth += (100 / (this.autoPlayDuration / 50));
+					this.updateProgress();
+					
+					if (this.progressWidth >= 100) {
+						clearInterval(progressInterval);
+						this.nextSlide();
+					}
+				}, 50);
+				
+				this.autoPlayInterval = progressInterval;
+			}
+			
+			pauseAutoPlay() {
+				if (this.autoPlayInterval) {
+					clearInterval(this.autoPlayInterval);
+					this.autoPlayInterval = null;
+				}
+			}
+			
+			restartAutoPlay() {
+				this.pauseAutoPlay();
+				this.startAutoPlay();
+			}
+		}
+		
+		// Initialize carousel when DOM is loaded
+		document.addEventListener('DOMContentLoaded', () => {
+			new HausaNLPCarousel();
+		});
+		</script>
 	</body>
 </html>
