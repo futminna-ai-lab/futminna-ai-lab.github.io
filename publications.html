@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Publications - HausaNLP</title>
+		<title>Publications - FUT Minna AI Lab</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -42,7 +42,7 @@
 			<section id="intro" class="wrapper style1-alt fade-up">
 				<div class="inner">
 					<h1>Publications</h1>
-					<p>Our research contributions to Hausa natural language processing and African language technologies.</p>
+					<p>Research outputs, datasets, and tools from FUT Minna AI Lab—focused on low-resource and endangered North-Central Nigerian languages (Nupe, Gbagyi), multilingual MT, code-switching, and ASR..</p>
 				</div>
 			</section>
 
@@ -134,7 +134,7 @@
 		<footer id="footer" class="wrapper style1-alt">
 			<div class="inner">
 				<ul class="menu">
-					<li>&copy; 2025 HausaNLP. All rights reserved.</li><li>Advancing NLP for African Languages</li>
+					<li>&copy; 2026 FUT Minna AI Lab. All rights reserved.</li><li>Low-resource & Endangered Languages NLP</li>
 				</ul>
 			</div>
 		</footer>
@@ -195,41 +195,139 @@
 			}
 		}
 
-		// Demo data for preview
-		function loadDemoData() {
-			publicationsData = [
-				{
-					id: 'ibrahim2025hausabert',
-					type: 'inproceedings',
-					title: 'HausaBERT: A Pre-trained Language Model for Hausa Natural Language Processing',
-					authors: ['Ibrahim, A.', 'Mohammed, S.', 'Garba, M.'],
-					venue: 'Proceedings of ACL 2025',
-					year: '2025',
-					abstract: 'We introduce HausaBERT, the first large-scale pre-trained language model specifically designed for Hausa NLP tasks. Our model achieves state-of-the-art performance on downstream tasks including named entity recognition, part-of-speech tagging, and sentiment analysis.',
-					url: 'https://example.com/hausabert',
-					bibtex: '@inproceedings{ibrahim2025hausabert,\n  title={HausaBERT: A Pre-trained Language Model for Hausa Natural Language Processing},\n  author={Ibrahim, A. and Mohammed, S. and Garba, M.},\n  booktitle={Proceedings of ACL 2025},\n  year={2025}\n}'
-				},
-				{
-					id: 'garba2025transfer',
-					type: 'inproceedings',
-					title: 'Cross-lingual Transfer Learning for Low-resource African Languages: A Case Study of Hausa',
-					authors: ['Garba, M.', 'Aliyu, F.'],
-					venue: 'EMNLP 2025',
-					year: '2025',
-					abstract: 'This paper investigates cross-lingual transfer learning techniques for improving NLP performance on low-resource African languages, with Hausa as our primary case study.',
-					bibtex: '@inproceedings{garba2025transfer,\n  title={Cross-lingual Transfer Learning for Low-resource African Languages: A Case Study of Hausa},\n  author={Garba, M. and Aliyu, F.},\n  booktitle={EMNLP 2025},\n  year={2025}\n}'
-				},
-				{
-					id: 'sani2024dialect',
-					type: 'inproceedings',
-					title: 'Dialect Variation in Hausa Speech Recognition: Challenges and Solutions',
-					authors: ['Sani, H.', 'Umar, K.'],
-					venue: 'INTERSPEECH 2024',
-					year: '2024',
-					abstract: 'We address the challenge of dialect variation in Hausa automatic speech recognition by developing robust models that can handle multiple dialects effectively.',
-					bibtex: '@inproceedings{sani2024dialect,\n  title={Dialect Variation in Hausa Speech Recognition: Challenges and Solutions},\n  author={Sani, H. and Umar, K.},\n  booktitle={INTERSPEECH 2024},\n  year={2024}\n}'
-				}
-			];
+		// Demo data for preview (FUT Minna AI Lab fallback)
+function loadDemoData() {
+  publicationsData = [
+    {
+      id: 'umar2023nupe_parallel_corpus',
+      type: 'techreport',
+      title: 'Nupe–English Parallel Corpus (Dataset Release)',
+      authors: ['Umar Baba Umar'],
+      venue: 'Mendeley Data',
+      year: '2023',
+      abstract: 'A publicly available Nupe–English parallel corpus designed to support machine translation and multilingual NLP research for Nupe.',
+      url: 'https://data.mendeley.com/datasets/k7dtv7k2hy/1',
+      doi: '10.17632/k7dtv7k2hy.1',
+      bibtex:
+`@misc{umar2023nupe_parallel_corpus,
+  title={Nupe-English parallel corpus},
+  author={Umar Baba Umar},
+  year={2023},
+  publisher={Mendeley Data},
+  doi={10.17632/k7dtv7k2hy.1},
+  url={https://data.mendeley.com/datasets/k7dtv7k2hy/1}
+}`
+    },
+    {
+      id: 'umar2024hausa_english_codeswitched',
+      type: 'techreport',
+      title: 'Hausa–English Code-Switched Dataset (Dataset Release)',
+      authors: ['Umar Baba Umar'],
+      venue: 'Mendeley Data',
+      year: '2024',
+      abstract: 'A Hausa–English code-switched dataset for multilingual NLP and code-switching research.',
+      url: 'https://data.mendeley.com/datasets/3xjyjsf4sb/1',
+      doi: '10.17632/3xjyjsf4sb.1',
+      bibtex:
+`@misc{umar2024hausa_english_codeswitched,
+  title={Hausa-English Code-Switched Dataset},
+  author={Umar Baba Umar},
+  year={2024},
+  publisher={Mendeley Data},
+  doi={10.17632/3xjyjsf4sb.1},
+  url={https://data.mendeley.com/datasets/3xjyjsf4sb/1}
+}`
+    },
+    {
+      id: 'shafii2023evaluating_english_to_nupe_bleu',
+      type: 'article',
+      title: 'Evaluating English to Nupe Machine Translation Model Using BLEU',
+      authors: ["Sayuti Musa Shafi'i", 'Hassan Umar Suru', 'Danlami Gabi'],
+      venue: 'Nigerian Journal of Engineering Science Research (NIJESR), Vol. 6(3)',
+      year: '2023',
+      abstract: 'This study evaluates the effectiveness of an English-to-Nupe machine translation system using BLEU, comparing system output with human translation.',
+      url: 'https://nijesr.iuokada.edu.ng/wp-content/uploads/2023/10/NIJESR-62-pp.-01-07-September-2023.pdf',
+      bibtex:
+`@article{shafii2023evaluating_english_to_nupe_bleu,
+  title={Evaluating English to Nupe Machine Translation Model Using BLEU},
+  author={Shafi'i, Sayuti Musa and Suru, Hassan Umar and Gabi, Danlami},
+  journal={Nigerian Journal of Engineering Science Research (NIJESR)},
+  year={2023},
+  volume={6},
+  number={3},
+  pages={01--07},
+  url={https://nijesr.iuokada.edu.ng/wp-content/uploads/2023/10/NIJESR-62-pp.-01-07-September-2023.pdf}
+}`
+    },
+    {
+      id: 'shafii2022english_to_nupe_rule_based',
+      type: 'article',
+      title: 'English to Nupe Machine Translation System Using Rule-Based Approach',
+      authors: ["Sayuti Musa Shafi'i", 'Hassan Suru', 'Abdulrahman Mohammed Saba'],
+      venue: 'International Journal of Advanced Research in Computer and Communication Engineering (IJARCCE), Vol. 11(1)',
+      year: '2022',
+      abstract: 'A transfer rule-based English-to-Nupe machine translation system implemented with a bilingual dictionary and grammatical rules.',
+      url: 'https://ijarcce.com/papers/english-to-nupe-machine-translation-system-using-rule-based-approach/',
+      doi: '10.17148/IJARCCE.2022.11126',
+      bibtex:
+`@article{shafii2022english_to_nupe_rule_based,
+  title={English to Nupe Machine Translation System Using Rule-Based Approach},
+  author={Shafi'i, Sayuti Musa and Suru, Hassan and Saba, Abdulrahman Mohammed},
+  journal={International Journal of Advanced Research in Computer and Communication Engineering (IJARCCE)},
+  year={2022},
+  volume={11},
+  number={1},
+  doi={10.17148/IJARCCE.2022.11126},
+  url={https://ijarcce.com/papers/english-to-nupe-machine-translation-system-using-rule-based-approach/}
+}`
+    },
+    {
+      id: 'umar2024nupe_speech_asr_naija_voices',
+      type: 'techreport',
+      title: 'Nupe Speech Data for ASR (Naija Voices Microgrant)',
+      authors: ['Umar Baba Umar'],
+      venue: 'Mozilla Data Collective',
+      year: '2024',
+      abstract: 'An open Nupe speech dataset (approx. 5 hours) collected to support ASR and speech technologies for Nupe.',
+      url: 'https://datacollective.mozillafoundation.org/datasets/cmihkoth10246md07dtojxehg',
+      bibtex:
+`@misc{umar2024nupe_speech_asr_naija_voices,
+  title={Nupe Speech Data for ASR (Naija Voices Microgrant)},
+  author={Umar Baba Umar},
+  year={2024},
+  howpublished={Mozilla Data Collective},
+  url={https://datacollective.mozillafoundation.org/datasets/cmihkoth10246md07dtojxehg}
+}`
+    },
+    {
+      id: 'umar2024gbagyi_speech_asr_naija_voices',
+      type: 'techreport',
+      title: 'Gbagyi Speech Data for ASR (Naija Voices Microgrant)',
+      authors: ['Umar Baba Umar'],
+      venue: 'Mozilla Data Collective',
+      year: '2024',
+      abstract: 'An open Gbagyi speech dataset (approx. 7 hours) collected to support ASR and speech technologies for Gbagyi.',
+      url: 'https://datacollective.mozillafoundation.org/datasets/cmit3jhj000nlnv073a6zduck',
+      bibtex:
+`@misc{umar2024gbagyi_speech_asr_naija_voices,
+  title={Gbagyi Speech Data for ASR (Naija Voices Microgrant)},
+  author={Umar Baba Umar},
+  year={2024},
+  howpublished={Mozilla Data Collective},
+  url={https://datacollective.mozillafoundation.org/datasets/cmit3jhj000nlnv073a6zduck}
+}`
+    }
+  ];
+
+  filteredData = [...publicationsData];
+  populateFilters();
+  updateStats();
+  displayPublications();
+
+  document.getElementById('loadingSpinner').style.display = 'none';
+  document.getElementById('statsBar').style.display = 'block';
+}
+
 			
 			filteredData = [...publicationsData];
 			populateFilters();
